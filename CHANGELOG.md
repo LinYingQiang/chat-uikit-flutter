@@ -1,6 +1,6 @@
-# 2.3.111111
+# 2.3.1
 
-## Bug Fixes 
+## Bug Fixes
 
 * Resolved an issue that prevented the clearing of history messages after deleting a conversation.
 * Fixed an issue that prevented opening files sent by the user themselves on Android.
