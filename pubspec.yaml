@@ -69,7 +69,7 @@ dependencies:
   path: ^1.8.1
   tencent_cloud_uikit_core: ^1.1.0
   pasteboard: ^0.2.0
-  desktop_drop: ^0.4.1
+  desktop_drop: ^0.4.4
   device_info_plus: any
   cross_file: ^0.3.3+4
   csslib: 0.17.2
