@@ -37,21 +37,22 @@ class _AZListViewContainerState extends TIMUIKitState<AZListViewContainer> {
     return curList;
   }
 
-  static Widget getSusItem(BuildContext context, String tag,
-      {double susHeight = 40}) {
+  static Widget getSusItem(BuildContext context, String tag, {double susHeight = 40}) {
+
     final theme = Provider.of<TUIThemeViewModel>(context).theme;
+    ThemeData themeData = Theme.of(context);
     return Container(
       height: susHeight,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.only(left: 16.0),
-      color: theme.weakDividerColor,
+      color: themeData.colorScheme.background,
       alignment: Alignment.centerLeft,
       child: Text(
         tag,
         softWrap: true,
         style: TextStyle(
           fontSize: 14.0,
-          color: theme.weakTextColor,
+          color: themeData.colorScheme.onBackground.withOpacity(0.8),
         ),
       ),
     );
@@ -75,22 +76,18 @@ class _AZListViewContainerState extends TIMUIKitState<AZListViewContainer> {
 
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
-    final isDesktopScreen =
-        TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
+    final isDesktopScreen = TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
     return ChangeNotifierProvider.value(
         value: serviceLocator<TUIThemeViewModel>(),
         child: Consumer<TUIThemeViewModel>(
             builder: (context, tuiTheme, child) => Scrollbar(
                 child: AzListView(
-                    physics: const BouncingScrollPhysics(
-                        parent: AlwaysScrollableScrollPhysics()),
+                    physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                     data: _list!,
                     itemCount: _list!.length,
                     itemBuilder: widget.itemBuilder,
                     indexBarData: (!isDesktopScreen && widget.isShowIndexBar)
-                        ? SuspensionUtil.getTagIndexList(_list!)
-                            .where((element) => element != "@")
-                            .toList()
+                        ? SuspensionUtil.getTagIndexList(_list!).where((element) => element != "@").toList()
                         : [],
                     susItemBuilder: (BuildContext context, int index) {
                       if (widget.susItemBuilder != null) {
@@ -101,7 +98,11 @@ class _AZListViewContainerState extends TIMUIKitState<AZListViewContainer> {
                         return Container();
                       }
                       return getSusItem(context, model.getSuspensionTag());
-                    }))));
+                    }
+                )
+            )
+        )
+    );
   }
 }
 

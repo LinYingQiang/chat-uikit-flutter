@@ -5,6 +5,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fc_native_video_thumbnail/fc_native_video_thumbnail.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
@@ -121,17 +122,17 @@ class _MorePanelState extends TIMUIKitState<MorePanel> {
               _onFeatureTap("screen", c, model, theme);
             },
             icon: Container(
-              height: 64,
-              width: 64,
-              margin: const EdgeInsets.only(bottom: 4),
+              height: 70.sp,
+              width: 70.sp,
+              margin: EdgeInsets.only(bottom: 10.h),
               decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
+                borderRadius: BorderRadius.all(Radius.circular(5))
+              ),
               child: SvgPicture.asset(
                 "images/screen.svg",
                 package: 'tencent_cloud_chat_uikit',
-                height: 64,
-                width: 64,
+                height: 70.sp,
+                width: 70.sp,
               ),
             )),
       if (!PlatformUtils().isWeb)
@@ -147,17 +148,17 @@ class _MorePanelState extends TIMUIKitState<MorePanel> {
               );
             },
             icon: Container(
-              height: 64,
-              width: 64,
-              margin: const EdgeInsets.only(bottom: 4),
+              height: 70.sp,
+              width: 70.sp,
+              margin: EdgeInsets.only(bottom: 10.h),
               decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
+                  borderRadius: BorderRadius.all(Radius.circular(5))
+              ),
               child: SvgPicture.asset(
                 "images/photo.svg",
                 package: 'tencent_cloud_chat_uikit',
-                height: 64,
-                width: 64,
+                height: 70.sp,
+                width: 70.sp,
               ),
             )),
       if (PlatformUtils().isWeb)
@@ -173,40 +174,18 @@ class _MorePanelState extends TIMUIKitState<MorePanel> {
               );
             },
             icon: Container(
-              height: 64,
-              width: 64,
-              margin: const EdgeInsets.only(bottom: 4),
+              height: 70.sp,
+              width: 70.sp,
+              margin: EdgeInsets.only(bottom: 10.h),
               decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
+                  borderRadius: BorderRadius.all(Radius.circular(5))
+              ),
               child: SvgPicture.asset(
                 "images/photo.svg",
                 package: 'tencent_cloud_chat_uikit',
-                height: 64,
-                width: 64,
+                height: 70.sp,
+                width: 70.sp,
               ),
-            )),
-      if (PlatformUtils().isWeb)
-        MorePanelItem(
-            id: "video",
-            title: TIM_t("视频"),
-            onTap: (c) {
-              _onFeatureTap(
-                "video",
-                c,
-                model,
-                theme,
-              );
-            },
-            icon: Container(
-              height: 64,
-              width: 64,
-              margin: const EdgeInsets.only(bottom: 4),
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              child:
-                  Icon(Icons.video_file, color: hexToColor("5c6168"), size: 26),
             )),
       MorePanelItem(
           id: "file",
@@ -220,17 +199,17 @@ class _MorePanelState extends TIMUIKitState<MorePanel> {
             );
           },
           icon: Container(
-            height: 64,
-            width: 64,
-            margin: const EdgeInsets.only(bottom: 4),
+            height: 70.sp,
+            width: 70.sp,
+            margin: EdgeInsets.only(bottom: 10.h),
             decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(5))),
+                borderRadius: BorderRadius.all(Radius.circular(5))
+            ),
             child: SvgPicture.asset(
               "images/file.svg",
               package: 'tencent_cloud_chat_uikit',
-              height: 64,
-              width: 64,
+              height: 70.sp,
+              width: 70.sp,
             ),
           )),
       if (isInstallCallkit && PlatformUtils().isMobile)
@@ -246,17 +225,17 @@ class _MorePanelState extends TIMUIKitState<MorePanel> {
               );
             },
             icon: Container(
-              height: 64,
-              width: 64,
-              margin: const EdgeInsets.only(bottom: 4),
+              height: 70.sp,
+              width: 70.sp,
+              margin: EdgeInsets.only(bottom: 10.h),
               decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
+                  borderRadius: BorderRadius.all(Radius.circular(5))
+              ),
               child: SvgPicture.asset(
                 "images/video-call.svg",
                 package: 'tencent_cloud_chat_uikit',
-                height: 64,
-                width: 64,
+                height: 70.sp,
+                width: 70.sp,
               ),
             )),
       if (isInstallCallkit && PlatformUtils().isMobile)
@@ -272,17 +251,17 @@ class _MorePanelState extends TIMUIKitState<MorePanel> {
               );
             },
             icon: Container(
-              height: 64,
-              width: 64,
-              margin: const EdgeInsets.only(bottom: 4),
+              height: 70.sp,
+              width: 70.sp,
+              margin: EdgeInsets.only(bottom: 10.h),
               decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
+                  borderRadius: BorderRadius.all(Radius.circular(5))
+              ),
               child: SvgPicture.asset(
                 "images/voice-call.svg",
                 package: 'tencent_cloud_chat_uikit',
-                height: 64,
-                width: 64,
+                height: 70.sp,
+                width: 70.sp,
               ),
             )),
       if (config.extraAction != null) ...?config.extraAction,
@@ -715,15 +694,13 @@ class _MorePanelState extends TIMUIKitState<MorePanel> {
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final TUITheme theme = value.theme;
-    final TUIChatSeparateViewModel model =
-        Provider.of<TUIChatSeparateViewModel>(context);
+    final TUIChatSeparateViewModel model = Provider.of<TUIChatSeparateViewModel>(context);
+    ThemeData themeData = Theme.of(context);
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: 248,
       decoration: BoxDecoration(
-        // color: hexToColor("EBF0F6"),
         border: Border(
-          top: BorderSide(width: 1, color: Colors.grey.shade300),
+          top: BorderSide(width: 2.sp, color: themeData.colorScheme.shadow),
         ),
       ),
       padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -733,8 +710,8 @@ class _MorePanelState extends TIMUIKitState<MorePanel> {
         child: SingleChildScrollView(
           controller: _scrollController,
           child: Wrap(
-            spacing: (screenWidth - (23 * 2) - 64 * 4) / 3,
-            runSpacing: 20,
+            spacing: (screenWidth - (23 * 2) - 120.sp * 4) / 3,
+            runSpacing: 30.h,
             children: itemList(model, theme)
                 .map((item) => InkWell(
                     onTap: () {
@@ -745,23 +722,23 @@ class _MorePanelState extends TIMUIKitState<MorePanel> {
                     child: widget.morePanelConfig?.actionBuilder != null
                         ? widget.morePanelConfig?.actionBuilder!(item)
                         : SizedBox(
-                            height: 94,
-                            width: 64,
+                            height: 150.sp,
+                            width: 120.sp,
                             child: Column(
                               children: [
                                 Container(
-                                  height: 64,
-                                  width: 64,
-                                  margin: const EdgeInsets.only(bottom: 4),
+                                  height: 100.sp,
+                                  width: 100.sp,
+                                  margin: EdgeInsets.only(bottom: 5.h),
                                   decoration: const BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5))),
+                                    borderRadius: BorderRadius.all(Radius.circular(5))
+                                  ),
                                   child: item.icon,
                                 ),
                                 Text(
                                   item.title,
                                   style: TextStyle(
-                                      fontSize: 12, color: theme.darkTextColor),
+                                      fontSize: 26.sp, color: themeData.colorScheme.onBackground.withOpacity(0.7)),
                                 )
                               ],
                             ),

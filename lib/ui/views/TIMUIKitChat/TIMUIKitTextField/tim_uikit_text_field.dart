@@ -862,7 +862,7 @@ class _InputTextFieldState extends TIMUIKitState<TIMUIKitInputTextField> {
                     customStickerPanel: widget.customStickerPanel,
                     forbiddenText: forbiddenText,
                     onChanged: widget.onChanged,
-                    backgroundColor: widget.backgroundColor,
+                    backgroundColor: widget.backgroundColor,  //背景颜色
                     morePanelConfig: widget.morePanelConfig,
                     repliedMessage: value,
                     currentCursor: currentCursor,

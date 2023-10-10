@@ -158,21 +158,19 @@ class _TIMUIKitProfileState extends TIMUIKitState<TIMUIKitProfile> {
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final theme = value.theme;
-    final isDesktopScreen =
-        TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
+    ThemeData themeData = Theme.of(context);
     return ChangeNotifierProvider.value(
       value: _model,
       child: Consumer<TUIProfileViewModel>(
         builder: (context, value, child) {
-          final TUIProfileViewModel model =
-              Provider.of<TUIProfileViewModel>(context);
+          final TUIProfileViewModel model = Provider.of<TUIProfileViewModel>(context);
           _controller.model = model;
           final V2TimFriendInfo? userInfo = model.userProfile?.friendInfo;
 
-          if (userInfo == null) {
+          if (userInfo == null) { //如果未加载、则展示加载中
             return Center(
               child: LoadingAnimationWidget.staggeredDotsWave(
-                color: theme.weakTextColor ?? Colors.grey,
+                color: themeData.colorScheme.primary,
                 size: 48,
               ),
             );
@@ -189,24 +187,16 @@ class _TIMUIKitProfileState extends TIMUIKitState<TIMUIKitProfile> {
                       TencentUtils.checkString(model
                           .userProfile?.friendInfo?.userProfile?.nickName) ??
                       widget.userID);
-          final TUISelfInfoViewModel _selfInfoViewModel =
-              serviceLocator<TUISelfInfoViewModel>();
+          final TUISelfInfoViewModel _selfInfoViewModel = serviceLocator<TUISelfInfoViewModel>();
 
           final isFriend = model.friendType != 0;
-          final isSelf = (model.userProfile?.friendInfo?.userID ==
-              _selfInfoViewModel.loginInfo?.userID);
+          final isSelf = (model.userProfile?.friendInfo?.userID == _selfInfoViewModel.loginInfo?.userID);
           final isMute = model.isDisturb ?? false;
 
           Widget profilePage({required Widget child}) {
-            return Container(
-              color: isDesktopScreen ? theme.wideBackgroundColor : null,
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                child: Container(
-                  child: child,
-                ),
-              ),
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              child: child,
             );
           }
 
@@ -288,15 +278,12 @@ class _TIMUIKitProfileState extends TIMUIKitState<TIMUIKitProfile> {
           }
 
           List<Widget> _renderWidgetsWithOrder(List<ProfileWidgetEnum> order) {
-            final ProfileWidgetBuilder? customBuilder =
-                widget.profileWidgetBuilder;
+            final ProfileWidgetBuilder? customBuilder = widget.profileWidgetBuilder;
+            ThemeData themeData = Theme.of(context);
             return order.map((element) {
               switch (element) {
-                case ProfileWidgetEnum.userInfoCard:
-                  return (customBuilder?.userInfoCard != null
-                      ? customBuilder?.userInfoCard!(userInfo.userProfile)
-                      : TIMUIKitProfileUserInfoCard(
-                          userInfo: userInfo.userProfile))!;
+                case ProfileWidgetEnum.userInfoCard: //头像/昵称/ID
+                  return (customBuilder?.userInfoCard != null ? customBuilder?.userInfoCard!(userInfo.userProfile) : TIMUIKitProfileUserInfoCard(userInfo: userInfo.userProfile))!;
                 case ProfileWidgetEnum.addToBlockListBar:
                   if (isSelf) {
                     return Container();
@@ -310,9 +297,6 @@ class _TIMUIKitProfileState extends TIMUIKitState<TIMUIKitProfile> {
                           handleAddToBlockList,
                           widget.smallCardMode))!;
                 case ProfileWidgetEnum.pinConversationBar:
-                  // if (!isFriend) {
-                  //   return Container();
-                  // }
                   return (customBuilder?.pinConversationBar != null
                       ? customBuilder?.pinConversationBar!(
                           conversation.isPinned ?? false, handlePinConversation)
@@ -387,44 +371,32 @@ class _TIMUIKitProfileState extends TIMUIKitState<TIMUIKitProfile> {
                           value.friendType,
                           isMute,
                         )
-                      : isDesktopScreen
-                          ? TIMUIKitProfileWidget.addAndDeleteAreaWide(
-                              userInfo,
-                              conversation,
-                              value.friendType,
-                              isMute,
-                              model.isAddToBlackList ?? false,
-                              theme,
-                              handleAddFriend,
-                              handleDeleteFriend,
-                              widget.smallCardMode)
-                          : TIMUIKitProfileWidget.addAndDeleteArea(
-                              userInfo,
-                              conversation,
-                              value.friendType,
-                              isMute,
-                              model.isAddToBlackList ?? false,
-                              theme,
-                              handleAddFriend,
-                              handleDeleteFriend,
-                              widget.smallCardMode))!;
+                      : TIMUIKitProfileWidget.addAndDeleteArea(
+                      userInfo,
+                      conversation,
+                      value.friendType,
+                      isMute,
+                      model.isAddToBlackList ?? false,
+                      theme,
+                      handleAddFriend,
+                      handleDeleteFriend,
+                      widget.smallCardMode,
+                      context)
+                  )!;
                 case ProfileWidgetEnum.operationDivider:
                   return (customBuilder?.operationDivider != null
                       ? customBuilder?.operationDivider!()
                       : TIMUIKitProfileWidget.operationDivider(
-                          color: theme.weakDividerColor,
-                          height: isDesktopScreen ? 1 : 10,
-                          margin: isDesktopScreen
-                              ? EdgeInsets.symmetric(
-                                  vertical: widget.smallCardMode ? 4 : 20)
-                              : null))!;
-                case ProfileWidgetEnum.remarkBar:
+                          color: themeData.colorScheme.background,
+                          height:  10,
+                          margin:  null)
+                  )!;
+                case ProfileWidgetEnum.remarkBar:  //备注
                   if (!isFriend) {
                     return Container();
                   }
                   return (customBuilder?.remarkBar != null
-                      ? customBuilder?.remarkBar!(
-                          userInfo.friendRemark ?? "", handleTapRemarkBar)
+                      ? customBuilder?.remarkBar!(userInfo.friendRemark ?? "", handleTapRemarkBar)
                       : TIMUIKitProfileWidget.remarkBar(
                           context,
                           userInfo.friendRemark ?? "",
@@ -468,8 +440,7 @@ class _TIMUIKitProfileState extends TIMUIKitState<TIMUIKitProfile> {
           }
 
           if (widget.builder != null) {
-            return widget.builder!(
-                context, userInfo, conversation, value.friendType, isMute);
+            return widget.builder!(context, userInfo, conversation, value.friendType, isMute);
           } else if (widget.profileWidgetsOrder != null) {
             return profilePage(
               child: Column(

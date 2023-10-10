@@ -373,11 +373,10 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final TUITheme theme = value.theme;
-    final closePanel =
-        OptimizeUtils.throttle((_) => textFieldController.hideAllPanel(), 60);
+    ThemeData themeData = Theme.of(context);
+    final closePanel = OptimizeUtils.throttle((_) => textFieldController.hideAllPanel(), 60);
     final isBuild = isInit;
     isInit = true;
-
     return TIMUIKitChatProviderScope(
         model: model,
         groupID: widget.groupID,
@@ -393,9 +392,7 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
           Provider(create: (_) => widget.config),
         ],
         builder: (context, model, w) {
-          final TUIChatGlobalModel chatGlobalModel =
-              Provider.of<TUIChatGlobalModel>(context, listen: true);
-
+          final TUIChatGlobalModel chatGlobalModel = Provider.of<TUIChatGlobalModel>(context, listen: true);
           widget.controller?.model = model;
           widget.controller?.textFieldController = textFieldController;
           widget.controller?.scrollController = autoController;
@@ -464,8 +461,7 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
                         config: widget.appBarConfig,
                         conversationShowName: _getTitle(),
                         conversationID: _getConvID(),
-                        showC2cMessageEditStatus:
-                            widget.config?.showC2cMessageEditStatus ?? true,
+                        showC2cMessageEditStatus: widget.config?.showC2cMessageEditStatus ?? true,
                       )
                     : null,
                 body: DropTarget(
@@ -498,62 +494,52 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
                         children: [
                           if (widget.customAppBar != null) widget.customAppBar!,
                           if (filteredApplicationList.isNotEmpty)
-                            _renderJoinGroupApplication(
-                                filteredApplicationList.length, theme),
+                            _renderJoinGroupApplication(filteredApplicationList.length, theme),
                           if (widget.topFixWidget != null) widget.topFixWidget!,
+                          //聊天消息区域
                           Expanded(
                               child: Container(
-                            color: theme.chatBgColor,
-                            child: Align(
-                                key: alignKey,
-                                alignment: Alignment.topCenter,
-                                child: Listener(
-                                  onPointerMove: closePanel,
-                                  child: TIMUIKitHistoryMessageListContainer(
-                                    customMessageHoverBarOnDesktop:
-                                        widget.customMessageHoverBarOnDesktop,
-                                    conversation: widget.conversation,
-                                    groupMemberInfo: model.groupMemberList
-                                        ?.firstWhere(
-                                            (element) =>
-                                                element?.userID == selfUserID,
-                                            orElse: () => null),
-                                    textFieldController: textFieldController,
-                                    customEmojiStickerList:
-                                        widget.customEmojiStickerList,
-                                    isUseDefaultEmoji:
-                                        widget.config!.isUseDefaultEmoji,
-                                    key: listContainerKey,
-                                    isAllowScroll: true,
-                                    userAvatarBuilder: widget.userAvatarBuilder,
-                                    toolTipsConfig: widget.toolTipsConfig,
-                                    groupAtInfoList: widget.groupAtInfoList,
-                                    tongueItemBuilder: widget.tongueItemBuilder,
-                                    onLongPressForOthersHeadPortrait:
-                                        (String? userId, String? nickName) {
-                                      textFieldController.longPressToAt(
-                                          nickName, userId);
-                                    },
-                                    mainHistoryListConfig:
-                                        widget.mainHistoryListConfig,
-                                    initFindingMsg: widget.initFindingMsg,
-                                    extraTipsActionItemBuilder:
-                                        widget.extraTipsActionItemBuilder ??
-                                            widget.exteraTipsActionItemBuilder,
-                                    conversationType: _getConvType(),
-                                    scrollController: autoController,
-                                    onSecondaryTapAvatar:
-                                        widget.onSecondaryTapAvatar,
-                                    onTapAvatar: widget.onTapAvatar,
-                                    // ignore: deprecated_member_use_from_same_package
-                                    showNickName: widget.showNickName,
-                                    messageItemBuilder:
-                                        widget.messageItemBuilder,
-                                    conversationID: _getConvID(),
-                                  ),
-                                )),
-                          )),
+                                color: theme.chatBgColor,
+                                child: Align(
+                                  key: alignKey,
+                                  alignment: Alignment.topCenter,
+                                  child: Listener(
+                                    onPointerMove: closePanel,
+                                    child: TIMUIKitHistoryMessageListContainer(
+                                      customMessageHoverBarOnDesktop: widget.customMessageHoverBarOnDesktop,
+                                      conversation: widget.conversation,
+                                      groupMemberInfo: model.groupMemberList
+                                          ?.firstWhere((element) => element?.userID == selfUserID, orElse: () => null),
+                                      textFieldController: textFieldController,
+                                      customEmojiStickerList: widget.customEmojiStickerList,
+                                      isUseDefaultEmoji: widget.config!.isUseDefaultEmoji,
+                                      key: listContainerKey,
+                                      isAllowScroll: true,
+                                      userAvatarBuilder: widget.userAvatarBuilder,
+                                      toolTipsConfig: widget.toolTipsConfig,
+                                      groupAtInfoList: widget.groupAtInfoList,
+                                      tongueItemBuilder: widget.tongueItemBuilder,
+                                      onLongPressForOthersHeadPortrait: (String? userId, String? nickName) {
+                                        textFieldController.longPressToAt(nickName, userId);
+                                      },
+                                      mainHistoryListConfig: widget.mainHistoryListConfig,
+                                      initFindingMsg: widget.initFindingMsg,
+                                      extraTipsActionItemBuilder: widget.extraTipsActionItemBuilder ?? widget.exteraTipsActionItemBuilder,
+                                      conversationType: _getConvType(),
+                                      scrollController: autoController,
+                                      onSecondaryTapAvatar: widget.onSecondaryTapAvatar,
+                                      onTapAvatar: widget.onTapAvatar,
+                                      // ignore: deprecated_member_use_from_same_package
+                                      showNickName: widget.showNickName,
+                                      messageItemBuilder: widget.messageItemBuilder,
+                                      conversationID: _getConvID(),
+                                    ),
+                                  )
+                                ),
+                              )
+                          ),
                           widget.inputTopBuilder ?? Container(),
+                          //聊天输入框区域
                           Selector<TUIChatSeparateViewModel, bool>(
                             builder: (context, value, child) {
                               return value
@@ -565,22 +551,16 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
                                       : TIMUIKitInputTextField(
                                           chatConfig: widget.config,
                                           groupID: widget.groupID,
-                                          atMemberPanelScroll:
-                                              atMemberPanelScroll,
-                                          groupType:
-                                              widget.conversation.groupType,
-                                          currentConversation:
-                                              widget.conversation,
+                                          atMemberPanelScroll: atMemberPanelScroll,
+                                          groupType: widget.conversation.groupType,
+                                          currentConversation: widget.conversation,
                                           model: model,
                                           controller: textFieldController,
-                                          customEmojiStickerList:
-                                              customImageSmallPngEmojiPackages,
-                                          isUseDefaultEmoji:
-                                              widget.config!.isUseDefaultEmoji,
-                                          customStickerPanel:
-                                              widget.customStickerPanel,
-                                          morePanelConfig:
-                                              widget.morePanelConfig,
+                                          backgroundColor: themeData.colorScheme.surface,  //输入框背景颜色
+                                          customEmojiStickerList: customImageSmallPngEmojiPackages,
+                                          isUseDefaultEmoji: widget.config!.isUseDefaultEmoji,
+                                          customStickerPanel: widget.customStickerPanel,
+                                          morePanelConfig: widget.morePanelConfig,
                                           scrollController: autoController,
                                           conversationID: _getConvID(),
                                           conversationType: _getConvType(),
@@ -597,16 +577,11 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
                                                       widget.conversation
                                                           .draftText)),
                                           hintText: widget.textFieldHintText,
-                                          showMorePanel: widget.config
-                                                  ?.isAllowShowMorePanel ??
-                                              true,
-                                          showSendAudio: widget.config
-                                                  ?.isAllowSoundMessage ??
-                                              true,
-                                          showSendEmoji: widget
-                                                  .config?.isAllowEmojiPanel ??
-                                              true,
-                                        ));
+                                          showMorePanel: widget.config?.isAllowShowMorePanel ?? true,
+                                          showSendAudio: widget.config?.isAllowSoundMessage ?? true,
+                                          showSendEmoji: widget.config?.isAllowEmojiPanel ?? true,
+                                        )
+                              );
                             },
                             selector: (c, model) {
                               return model.isMultiSelect;

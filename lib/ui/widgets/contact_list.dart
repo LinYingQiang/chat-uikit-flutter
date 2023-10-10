@@ -111,6 +111,8 @@ class _ContactListState extends TIMUIKitState<ContactList> {
             orElse: () => V2TimUserStatus(statusType: 0))
         : null;
 
+    ThemeData themeData = Theme.of(context);
+
     bool disabled = false;
     if (widget.groupMemberList != null && widget.groupMemberList!.isNotEmpty) {
       disabled = ((widget.groupMemberList
@@ -118,21 +120,19 @@ class _ContactListState extends TIMUIKitState<ContactList> {
               -1) >
           -1;
     }
-
-    final isDesktopScreen = TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
-
     return Container(
-      padding: const EdgeInsets.only(top: 8, left: 16, right: 12),
+      height: 110.h,
+      padding: EdgeInsets.symmetric(vertical: 15.h,horizontal: 25.w),
       decoration: BoxDecoration(
-          border: Border(
-              bottom: BorderSide(
-                  color:
-                      theme.weakDividerColor ?? CommonColor.weakDividerColor))),
+        color: themeData.colorScheme.surface,
+        border: Border(bottom: BorderSide(color: themeData.colorScheme.tertiary))
+      ),
       child: Row(
         children: [
           if (widget.isCanSelectMemberItem)
             Container(
-              margin: const EdgeInsets.only(right: 12, bottom: 8),
+              width: 80.w,
+              margin: EdgeInsets.only(right: 10.w),
               child: CheckBoxButton(
                 disabled: disabled,
                 isChecked: selectedMember.contains(item),
@@ -155,25 +155,27 @@ class _ContactListState extends TIMUIKitState<ContactList> {
               ),
             ),
           Container(
-            padding: const EdgeInsets.only(bottom: 12),
-            margin: const EdgeInsets.only(right: 12),
+            margin: EdgeInsets.only(right: 25.w),
             child: SizedBox(
-              height: isDesktopScreen ? 30 : 40,
-              width: isDesktopScreen ? 30 : 40,
+              height: 90.w,
+              width: 90.w,
               child: Avatar(
                   onlineStatus: onlineStatus,
                   faceUrl: faceUrl,
-                  showName: showName),
+                  showName: showName,
+              ),
             ),
           ),
           Expanded(
             child: Container(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(top: 10, bottom: 20, right: 28),
               child: Text(
                 showName,
                 style: TextStyle(
-                color: Colors.black, fontSize: isDesktopScreen ? 14 : 18),
+                  color: themeData.colorScheme.onBackground.withOpacity(0.8),
+                  fontSize: 38.sp,
+                  overflow: TextOverflow.ellipsis
+                ),
               ),
             )
           ),

@@ -196,8 +196,6 @@ class TIMUIKitMessageTooltipState
 
   _buildLongPressTipItem(
       TUITheme theme, TUIChatSeparateViewModel model, V2TimMessage message) {
-    final isDesktopScreen =
-        TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
     final isCanRevokeSelf = isRevocable(
         widget.message.timestamp!, model.chatConfig.upperRecallTime);
     final shouldShowRevokeAction = (isCanRevokeSelf || isAdminCanRecall()) &&
@@ -207,25 +205,9 @@ class TIMUIKitMessageTooltipState
     final shouldShowForwardAction = !(widget.message.customElem?.data != null &&
         MessageUtils.isCallingData(widget.message.customElem!.data!));
     final tooltipsConfig = widget.toolTipsConfig;
-    final messageCanCopy = widget.message.elemType ==
-            MessageElemType.V2TIM_ELEM_TYPE_TEXT ||
-        (isDesktopScreen &&
-            widget.message.elemType == MessageElemType.V2TIM_ELEM_TYPE_IMAGE &&
-            fileBeenDownloaded);
+    final messageCanCopy = widget.message.elemType == MessageElemType.V2TIM_ELEM_TYPE_TEXT;
 
     final List<MessageToolTipItem> defaultTipsList = [
-      if (fileBeenDownloaded)
-        MessageToolTipItem(
-            label: TIM_t("打开"),
-            id: "open",
-            iconImageAsset: "images/open_in_new.png",
-            onClick: () => _onTap("open", model)),
-      if (fileBeenDownloaded && PlatformUtils().isDesktop)
-        MessageToolTipItem(
-            label: PlatformUtils().isMacOS ? TIM_t("在访达中打开") : TIM_t("查看文件夹"),
-            id: "finder",
-            iconImageAsset: "images/folder_open.png",
-            onClick: () => _onTap("finder", model)),
       if (messageCanCopy)
         MessageToolTipItem(
             label: TIM_t("复制"),
@@ -250,11 +232,6 @@ class TIMUIKitMessageTooltipState
           iconImageAsset: "images/multi_message.png",
           onClick: () => _onTap("multiSelect", model)),
       MessageToolTipItem(
-          label: TIM_t("翻译"),
-          id: "translate",
-          iconImageAsset: "images/translate.png",
-          onClick: () => _onTap("translate", model)),
-      MessageToolTipItem(
           label: TIM_t("删除"),
           id: "delete",
           iconImageAsset: "images/delete_message.png",
@@ -275,12 +252,10 @@ class TIMUIKitMessageTooltipState
           return tooltipsConfig.showCopyMessage;
         }
         if (type == "forwardMessage") {
-          return tooltipsConfig.showForwardMessage &&
-              !(isDesktopScreen && widget.iSUseDefaultHoverBar);
+          return tooltipsConfig.showForwardMessage;
         }
         if (type == "replyMessage") {
-          return tooltipsConfig.showReplyMessage &&
-              !(isDesktopScreen && widget.iSUseDefaultHoverBar);
+          return tooltipsConfig.showReplyMessage;
         }
         if (type == "delete") {
           return (!PlatformUtils().isWeb) && tooltipsConfig.showDeleteMessage;
@@ -312,90 +287,45 @@ class TIMUIKitMessageTooltipState
     ];
 
     List<dynamic> widgetList = [];
-    if (isDesktopScreen) {
-      widgetList = formattedTipsList
-          .map(
-            (item) => Material(
-              color: Colors.white,
-              child: InkWell(
-                onTap: () {
-                  item.onClick();
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        item.iconImageAsset,
-                        package: defaultTipsIds.contains(item.id)
-                            ? 'tencent_cloud_chat_uikit'
-                            : null,
-                        width: 20,
-                        height: 20,
-                      ),
-                      const SizedBox(
-                        height: 4,
-                        width: 8,
-                      ),
-                      Text(
-                        item.label,
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          color: theme.darkTextColor,
-                          fontSize: 12,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          )
-          .toList();
-    } else {
-      widgetList = formattedTipsList
-          .map(
-            (item) => Material(
+    widgetList = formattedTipsList
+        .map(
+          (item) => Material(
               color: Colors.white,
               child: ItemInkWell(
-                onTap: () {
-                  item.onClick();
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      item.iconImageAsset,
-                      package: defaultTipsIds.contains(item.id)
-                          ? 'tencent_cloud_chat_uikit'
-                          : null,
-                      width: 20,
-                      height: 20,
+              onTap: () {
+                item.onClick();
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    item.iconImageAsset,
+                    package: defaultTipsIds.contains(item.id)
+                        ? 'tencent_cloud_chat_uikit'
+                        : null,
+                    width: 20,
+                    height: 20,
+                  ),
+                  const SizedBox(
+                    height: 4,
+                    width: 60,
+                  ),
+                  Text(
+                    item.label,
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      color: theme.darkTextColor,
+                      fontSize: 10,
                     ),
-                    const SizedBox(
-                      height: 4,
-                      width: 60,
-                    ),
-                    Text(
-                      item.label,
-                      style: TextStyle(
-                        decoration: TextDecoration.none,
-                        color: theme.darkTextColor,
-                        fontSize: 10,
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
-            ),
-          )
-          .toList();
-    }
+          ),
+      ),
+    ).toList();
     if (widgetList.isEmpty && widget.isUseMessageReaction == false) {
       widget.onCloseTooltip();
     }
-
     return widgetList;
   }
 
@@ -535,44 +465,20 @@ class TIMUIKitMessageTooltipState
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final TUITheme theme = value.theme;
-    final isDesktopScreen =
-        TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
+    ThemeData themeData = Theme.of(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: widget.model),
       ],
       builder: (BuildContext context, Widget? w) {
-        final TUIChatSeparateViewModel model =
-            Provider.of<TUIChatSeparateViewModel>(context);
-        final bool haveExtraTipsConfig = widget.toolTipsConfig != null &&
-            widget.toolTipsConfig?.additionalItemBuilder != null;
-        Widget? extraTipsActionItem = haveExtraTipsConfig
-            ? widget.toolTipsConfig!.additionalItemBuilder!(
-                widget.message, widget.onCloseTooltip, null, context)
-            : null;
+        final TUIChatSeparateViewModel model = Provider.of<TUIChatSeparateViewModel>(context);
+        final bool haveExtraTipsConfig = widget.toolTipsConfig != null && widget.toolTipsConfig?.additionalItemBuilder != null;
+        Widget? extraTipsActionItem = haveExtraTipsConfig ? widget.toolTipsConfig!.additionalItemBuilder!(widget.message, widget.onCloseTooltip, null, context) : null;
         final message = widget.message;
         return Container(
-            decoration: isDesktopScreen
-                ? BoxDecoration(
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0xCCbebebe),
-                        offset: Offset(2, 2),
-                        blurRadius: 10,
-                        spreadRadius: 1,
-                      ),
-                    ],
-                    border: Border.all(
-                      width: 1,
-                      color: hexToColor("dee0e3"),
-                    ),
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  )
-                : null,
-            color: isDesktopScreen ? null : Colors.white,
-            padding: EdgeInsets.symmetric(
-                horizontal: 8, vertical: isDesktopScreen ? 8 : 4),
+            color: themeData.colorScheme.surface,
+            padding: const EdgeInsets.symmetric(
+                horizontal: 8, vertical: 4),
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxWidth: min(MediaQuery.of(context).size.width * 0.75, 350),
@@ -580,7 +486,7 @@ class TIMUIKitMessageTooltipState
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if ((!isDesktopScreen || widget.isShowMoreSticker) &&
+                  if (widget.isShowMoreSticker &&
                       widget.isUseMessageReaction &&
                       widget.selectEmojiPanelPosition ==
                           SelectEmojiPanelPosition.up)
@@ -593,8 +499,7 @@ class TIMUIKitMessageTooltipState
                         });
                       },
                     ),
-                  if (!isDesktopScreen &&
-                      widget.isUseMessageReaction &&
+                  if (widget.isUseMessageReaction &&
                       widget.selectEmojiPanelPosition ==
                           SelectEmojiPanelPosition.up &&
                       isShowMoreSticker == false)
@@ -609,7 +514,7 @@ class TIMUIKitMessageTooltipState
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (!isDesktopScreen && widget.isUseMessageReaction)
+                        if (widget.isUseMessageReaction)
                           Expanded(
                               child: Wrap(
                             direction: Axis.horizontal,
@@ -626,7 +531,7 @@ class TIMUIKitMessageTooltipState
                                 extraTipsActionItem
                             ],
                           )),
-                        if (!isDesktopScreen && !widget.isUseMessageReaction)
+                        if (!widget.isUseMessageReaction)
                           ConstrainedBox(
                             constraints: BoxConstraints(
                               maxWidth: min(
@@ -650,20 +555,9 @@ class TIMUIKitMessageTooltipState
                               ],
                             ),
                           ),
-                        if (isDesktopScreen)
-                          Table(columnWidths: const <int, TableColumnWidth>{
-                            0: IntrinsicColumnWidth(),
-                          }, children: <TableRow>[
-                            ..._buildLongPressTipItem(theme, model, message)
-                                .map((e) => TableRow(children: <Widget>[e]))
-                          ])
                       ],
                     ),
-                  if (!isDesktopScreen &&
-                      widget.isUseMessageReaction &&
-                      widget.selectEmojiPanelPosition ==
-                          SelectEmojiPanelPosition.down &&
-                      isShowMoreSticker == false)
+                  if (widget.isUseMessageReaction && widget.selectEmojiPanelPosition == SelectEmojiPanelPosition.down && isShowMoreSticker == false)
                     Container(
                         margin: const EdgeInsets.symmetric(vertical: 6),
                         child: const Divider(
@@ -671,10 +565,7 @@ class TIMUIKitMessageTooltipState
                             indent: 0,
                             // endIndent: 10,
                             color: Colors.black12)),
-                  if ((!isDesktopScreen || widget.isShowMoreSticker) &&
-                      widget.isUseMessageReaction &&
-                      widget.selectEmojiPanelPosition ==
-                          SelectEmojiPanelPosition.down)
+                  if (widget.isShowMoreSticker && widget.isUseMessageReaction && widget.selectEmojiPanelPosition == SelectEmojiPanelPosition.down)
                     TIMUIKitMessageReactionEmojiSelectPanel(
                       isShowMoreSticker: isShowMoreSticker,
                       onSelect: (int value) => widget.onSelectSticker(value),

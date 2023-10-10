@@ -221,8 +221,7 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
     }
   }
 
-  Widget _defaultSecondaryMenu(
-      V2TimConversation conversationItem, VoidCallback onClose) {
+  Widget _defaultSecondaryMenu(V2TimConversation conversationItem, VoidCallback onClose) {
     return TUIKitColumnMenu(data: [
       if (!PlatformUtils().isWeb)
         ColumnMenuItem(
@@ -274,8 +273,7 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
         onPressed: (context) {
           _pinConversation(conversationItem);
         },
-        backgroundColor:
-            theme.conversationItemSliderPinBgColor ?? CommonColor.infoColor,
+        backgroundColor: theme.conversationItemSliderPinBgColor ?? CommonColor.infoColor,
         foregroundColor: theme.conversationItemSliderTextColor,
         label: conversationItem.isPinned! ? TIM_t("取消置顶") : TIM_t("置顶"),
       ),
@@ -283,16 +281,14 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
         onPressed: (context) {
           _deleteConversation(conversationItem);
         },
-        backgroundColor:
-            theme.conversationItemSliderDeleteBgColor ?? Colors.red,
+        backgroundColor: theme.conversationItemSliderDeleteBgColor ?? Colors.red,
         foregroundColor: theme.conversationItemSliderTextColor,
         label: TIM_t("删除"),
       )
     ];
   }
 
-  Widget _getSecondaryMenu(
-      V2TimConversation conversation, VoidCallback onClose) {
+  Widget _getSecondaryMenu(V2TimConversation conversation, VoidCallback onClose) {
     if (widget.itemSecondaryMenuBuilder != null) {
       return widget.itemSecondaryMenuBuilder!(conversation, onClose);
     }
@@ -358,11 +354,10 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
                             conversationItem!, onlineStatus);
                       }
 
-                      final slideChildren =
-                          _getSlideBuilder()(conversationItem!);
+                      //侧滑
+                      final slideChildren = _getSlideBuilder()(conversationItem!);
 
-                      final isCurrent = conversationItem.conversationID ==
-                          model.selectedConversation?.conversationID;
+                      final isCurrent = conversationItem.conversationID == model.selectedConversation?.conversationID;
 
                       final isPined = conversationItem.isPinned ?? false;
 
@@ -411,20 +406,17 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
                                     operationKey: TUIKitWideModalOperationKey
                                         .conversationSecondaryMenu,
                                     isDarkBackground: false,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(4)),
+                                    borderRadius: const BorderRadius.all(Radius.circular(4)),
                                     context: context,
                                     offset: Offset(
                                         min(
                                             details.globalPosition.dx,
-                                            MediaQuery.of(context).size.width -
-                                                80),
+                                            MediaQuery.of(context).size.width - 80),
                                         min(
                                             details.globalPosition.dy,
-                                            MediaQuery.of(context).size.height -
-                                                130)),
-                                    child: (onClose) => _getSecondaryMenu(
-                                        conversationItem, onClose));
+                                            MediaQuery.of(context).size.height - 130)),
+                                    child: (onClose) => _getSecondaryMenu(conversationItem, onClose)
+                                );
                               },
                               child: conversationLineItem(),
                             ),
@@ -437,8 +429,7 @@ class _TIMUIKitConversationState extends TIMUIKitState<TIMUIKitConversation> {
                                 groupTag: 'conversation-list',
                                 child: conversationLineItem(),
                                 endActionPane: ActionPane(
-                                    extentRatio:
-                                        slideChildren.length > 2 ? 0.77 : 0.5,
+                                    extentRatio: slideChildren.length > 2 ? 0.8 : 0.5,
                                     motion: const DrawerMotion(),
                                     children: slideChildren)),
                           ));

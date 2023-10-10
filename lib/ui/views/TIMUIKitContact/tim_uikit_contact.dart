@@ -55,8 +55,6 @@ class _TIMUIKitContactState extends TIMUIKitState<TIMUIKitContact> {
 
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
-    final theme = value.theme;
-    final isDesktopScreen = TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
     return MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: model),
@@ -71,16 +69,10 @@ class _TIMUIKitContactState extends TIMUIKitState<TIMUIKitContact> {
             isShowOnlineStatus: widget.isShowOnlineStatus,
             contactList: memberList,
             onTapItem: (item){
-              if(isDesktopScreen){
-                setState(() {
-                  currentItem = item.userID;
-                });
-              }
               if(widget.onTapItem != null){
                 widget.onTapItem!(item);
               }
             },
-            bgColor: isDesktopScreen ? theme.wideBackgroundColor : null,
             topList: widget.topList,
             topListItemBuilder: widget.topListItemBuilder,
           );

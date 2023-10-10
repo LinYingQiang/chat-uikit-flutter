@@ -71,7 +71,7 @@ class TUIKitColumnMenuState extends TIMUIKitState<TUIKitColumnMenu> {
       ),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: min(MediaQuery.of(context).size.width * 0.7, 350),
+          maxWidth: min(MediaQuery.of(context).size.width * 0.6, 350),
         ),
         child: Table(
           columnWidths: const <int, TableColumnWidth>{

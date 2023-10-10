@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
@@ -26,6 +27,7 @@ class TIMUIKitProfileUserInfoCardNarrow extends TIMUIKitStatelessWidget {
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final TUITheme theme = value.theme;
+    ThemeData themeData = Theme.of(context);
     final faceUrl = userInfo?.faceUrl ?? "";
     final nickName = userInfo?.nickName ?? "";
     final signature = userInfo?.selfSignature;
@@ -37,7 +39,7 @@ class TIMUIKitProfileUserInfoCardNarrow extends TIMUIKitStatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      color: Colors.white,
+      color: themeData.colorScheme.surface,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -65,8 +67,8 @@ class TIMUIKitProfileUserInfoCardNarrow extends TIMUIKitStatelessWidget {
               children: [
                 SizedBox(
                   child: SelectableText(
-                    showName ?? "",
-                    style: const TextStyle(fontSize: 18, color: Colors.black),
+                    showName ?? "Unknown",
+                    style: TextStyle(fontSize: 38.sp, color: themeData.colorScheme.onSurface),
                   ),
                 ),
                 Container(
@@ -74,20 +76,17 @@ class TIMUIKitProfileUserInfoCardNarrow extends TIMUIKitStatelessWidget {
                   child: Row(
                     children: [
                       Text(
-                        "ID:  ",
-                        style:
-                            TextStyle(fontSize: 13, color: theme.weakTextColor),
+                        "ID:  ", style: TextStyle(fontSize: 28.sp, color: themeData.colorScheme.onSurface.withOpacity(0.7)),
                       ),
-                      SelectableText(
-                        userInfo?.userID ?? "",
-                        style:
-                            TextStyle(fontSize: 13, color: theme.weakTextColor),
+                      SelectableText(userInfo?.userID ?? "",
+                        style: TextStyle(fontSize: 28.sp, color: themeData.colorScheme.onSurface.withOpacity(0.7)),
                       ),
                     ],
                   ),
                 ),
                 SelectableText(signatureText,
-                    style: TextStyle(fontSize: 13, color: theme.weakTextColor))
+                    style: TextStyle(fontSize: 28.sp, color: themeData.colorScheme.onSurface.withOpacity(0.7))
+                )
               ],
             ),
           ),

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:provider/provider.dart';
@@ -281,8 +282,8 @@ class _SendSoundMessageState extends TIMUIKitState<SendSoundMessage> {
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final TUITheme theme = value.theme;
-    final TUIChatSeparateViewModel model =
-        Provider.of<TUIChatSeparateViewModel>(context);
+    ThemeData themeData = Theme.of(context);
+    final TUIChatSeparateViewModel model = Provider.of<TUIChatSeparateViewModel>(context);
     return GestureDetector(
       onTapDown: (detail) async {
         if (!isInit) {
@@ -303,15 +304,17 @@ class _SendSoundMessageState extends TIMUIKitState<SendSoundMessage> {
       onLongPressCancel: onLonePressCancel,
       child: Container(
         height: 35,
-        color: isRecording ? theme.weakBackgroundColor : Colors.white,
         alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.sp),
+          color: isRecording ? themeData.colorScheme.tertiary.withOpacity(0.6) : themeData.colorScheme.tertiary, //语音按住背景颜色
+        ),
         child: Text(
-          TIM_t("按住说话"),
+          "按住  说话",
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-            color: theme.darkTextColor,
+            fontSize: 32.sp,
+            color: themeData.colorScheme.onBackground,
           ),
         ),
       ),

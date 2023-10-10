@@ -1,19 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_class.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
-import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 
 import 'package:tencent_cloud_chat_uikit/ui/widgets/avatar.dart';
 
 class TIMUIKitProfileWidget extends TIMUIKitClass {
-  static final bool isDesktopScreen =
-      TUIKitScreenUtils.getFormFactor() == DeviceType.Desktop;
 
-  static Widget operationDivider(
-      {Color? color, double? height, EdgeInsetsGeometry? margin}) {
+  static Widget operationDivider({Color? color, double? height, EdgeInsetsGeometry? margin}) {
     return Container(
       color: color,
       margin: margin,
@@ -46,8 +43,7 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
         isEmpty: remark.isEmpty,
         wideEditText: TIM_t("设置备注名"),
         operationName: TIM_t("备注名"),
-        operationRightWidget:
-            Text(remark, textAlign: isDesktopScreen ? null : TextAlign.end),
+        operationRightWidget: Text(remark, textAlign: TextAlign.end),
       ),
     );
   }
@@ -117,7 +113,7 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
       operationName: operationName,
       type: type,
       operationRightWidget: Text(operationText ?? "",
-          textAlign: isDesktopScreen ? null : TextAlign.end),
+          textAlign:  TextAlign.end),
       operationValue: operationValue,
       onSwitchChange: onSwitchChange,
     );
@@ -185,7 +181,7 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
         showAllowEditStatus: false,
         operationName: TIM_t("昵称"),
         operationRightWidget:
-            Text(nickName, textAlign: isDesktopScreen ? null : TextAlign.end),
+            Text(nickName, textAlign:  TextAlign.end),
       ),
     );
   }
@@ -199,7 +195,7 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
         showAllowEditStatus: false,
         operationName: TIM_t("账号"),
         operationRightWidget: SelectableText(userNum,
-            textAlign: isDesktopScreen ? null : TextAlign.end),
+            textAlign: TextAlign.end),
       ),
     );
   }
@@ -213,7 +209,7 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
         showAllowEditStatus: false,
         operationName: TIM_t("个性签名"),
         operationRightWidget:
-            Text(signature, textAlign: isDesktopScreen ? null : TextAlign.end),
+            Text(signature, textAlign: TextAlign.end),
       ),
     );
   }
@@ -232,7 +228,7 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
         showAllowEditStatus: false,
         operationName: TIM_t("性别"),
         operationRightWidget: Text(genderMap[gender],
-            textAlign: isDesktopScreen ? null : TextAlign.end),
+            textAlign: TextAlign.end),
       ),
     );
   }
@@ -250,7 +246,7 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
         isEmpty: false,
         operationName: TIM_t("性别"),
         operationRightWidget: Text(genderMap[gender],
-            textAlign: isDesktopScreen ? null : TextAlign.end),
+            textAlign: TextAlign.end),
       ),
     );
   }
@@ -266,7 +262,7 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
         showAllowEditStatus: false,
         operationName: TIM_t("生日"),
         operationRightWidget: Text(formatter.format(date),
-            textAlign: isDesktopScreen ? null : TextAlign.end),
+            textAlign: TextAlign.end),
       );
     } catch (e) {
       return TIMUIKitOperationItem(
@@ -275,7 +271,7 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
         showAllowEditStatus: false,
         operationName: TIM_t("生日"),
         operationRightWidget:
-            Text(TIM_t("未填写"), textAlign: isDesktopScreen ? null : TextAlign.end),
+            Text(TIM_t("未填写"), textAlign: TextAlign.end),
       );
     }
   }
@@ -290,8 +286,10 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
       TUITheme theme,
       VoidCallback handleAddFriend,
       VoidCallback handleDeleteFriend,
-      bool smallCardMode) {
+      bool smallCardMode,
+      BuildContext context) {
     _buildDeleteFriend(V2TimConversation conversation, theme) {
+      ThemeData themeData = Theme.of(context);
       return InkWell(
         onTap: () {
           handleDeleteFriend();
@@ -300,32 +298,32 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(vertical: 15),
           decoration: BoxDecoration(
-              color: Colors.white,
-              border:
-                  Border(bottom: BorderSide(color: theme.weakDividerColor))),
+              color: themeData.colorScheme.surface,
+              border: Border(bottom: BorderSide(color: themeData.colorScheme.tertiary))),
           child: Text(
-            TIM_t("清除好友"),
+            TIM_t("删除好友"),
             style: TextStyle(color: theme.cautionColor, fontSize: 17),
           ),
         ),
       );
     }
 
-    _buildAddOperation() {
+    _buildAddOperation(BuildContext context) {
+      ThemeData themeData = Theme.of(context);
       return Container(
         alignment: Alignment.center,
         // padding: const EdgeInsets.symmetric(vertical: 15),
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: themeData.colorScheme.surface,
             border: Border(
                 bottom: BorderSide(
-                    color: theme.weakDividerColor ??
-                        CommonColor.weakDividerColor))),
+                    color: themeData.colorScheme.tertiary))),
         child: Row(children: [
           Expanded(
             child: TextButton(
+                style:ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent)),
                 child: Text(TIM_t("加为好友"),
-                    style: TextStyle(color: theme.primaryColor, fontSize: 17)),
+                    style: TextStyle(color: theme.primaryColor, fontSize: 32.sp)),
                 onPressed: () {
                   handleAddFriend();
                 }),
@@ -337,7 +335,7 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
     return Column(
       children: [
         if (friendType != 0) _buildDeleteFriend(conversation, theme),
-        if (friendType == 0 && !isBlocked) _buildAddOperation()
+        if (friendType == 0 && !isBlocked) _buildAddOperation(context)
       ],
     );
   }

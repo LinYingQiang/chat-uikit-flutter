@@ -50,9 +50,8 @@ class TIMUIKitOperationItem extends TIMUIKitStatelessWidget {
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final TUITheme theme = value.theme;
-    final isDesktopScreen =
-        TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
-
+    final isDesktopScreen = TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
+    ThemeData themeData = Theme.of(context);
     return Container(
       padding: isDesktopScreen
           ? EdgeInsets.symmetric(
@@ -60,7 +59,7 @@ class TIMUIKitOperationItem extends TIMUIKitStatelessWidget {
               vertical: smallCardMode ? 0 : 4)
           : const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       margin: isDesktopScreen ? null : const EdgeInsets.only(bottom: 1),
-      color: Colors.white,
+      color: themeData.colorScheme.surface,
       child: (isDesktopScreen && isUseCheckedBoxOnWide)
           ? Row(
               children: [
@@ -77,21 +76,22 @@ class TIMUIKitOperationItem extends TIMUIKitStatelessWidget {
                 ),
                 Expanded(
                     child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      operationName,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    if (operationDescription != null)
-                      Text(
-                        operationDescription!,
-                        style:
-                            TextStyle(color: theme.weakTextColor, fontSize: 12),
-                      )
-                  ],
-                )),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          operationName,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        if (operationDescription != null)
+                          Text(
+                            operationDescription!,
+                            style:
+                                TextStyle(color: theme.weakTextColor, fontSize: 12),
+                          )
+                      ],
+                    )
+                ),
               ],
             )
           : Row(
@@ -130,8 +130,7 @@ class TIMUIKitOperationItem extends TIMUIKitStatelessWidget {
                         Text(
                           operationName,
                           style: TextStyle(
-                              color:
-                                  isDesktopScreen ? hexToColor("7f7f7f") : null),
+                              color: themeData.colorScheme.onBackground),
                         ),
                         if (operationDescription != null)
                           Text(
@@ -141,7 +140,8 @@ class TIMUIKitOperationItem extends TIMUIKitStatelessWidget {
                           )
                       ],
                     ),
-                  )),
+                  )
+                  ),
                 if (type == "switch")
                   Transform.scale(
                     key: itemBoxKey,
