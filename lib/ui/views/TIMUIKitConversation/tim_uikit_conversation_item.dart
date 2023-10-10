@@ -1,7 +1,8 @@
 // ignore_for_file: empty_catches
 
 import 'package:flutter/material.dart';
-import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart' as su;
 import 'package:tencent_im_base/tencent_im_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
 
@@ -55,7 +56,7 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
   }) : super(key: key);
 
   Widget _getShowMsgWidget(BuildContext context) {
-    final isDesktopScreen = TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
+    final isDesktopScreen = su.TUIKitScreenUtils.getFormFactor(context) == su.DeviceType.Desktop;
     if (isShowDraft && draftText != null && draftText != "") {
       return TIMUIKitDraftText(
         context: context,
@@ -108,100 +109,93 @@ class TIMUIKitConversationItem extends TIMUIKitStatelessWidget {
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final TUITheme theme = value.theme;
-    final isDesktopScreen = TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
+    final isDesktopScreen = su.TUIKitScreenUtils.getFormFactor(context) == su.DeviceType.Desktop;
     return Container(
       padding: const EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 16),
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: theme.conversationItemBorderColor ??
-                CommonColor.weakDividerColor,
-            width: 1,
-          ),
-        ),
+        border: Border(bottom: BorderSide(color: theme.conversationItemBorderColor ?? CommonColor.weakDividerColor, width: 1)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            padding: const EdgeInsets.only(top: 0, bottom: 2, right: 0),
-            child: SizedBox(
-              width: isDesktopScreen ? 40 : 44,
-              height: isDesktopScreen ? 40 : 44,
-              child: Stack(
-                fit: StackFit.expand,
-                clipBehavior: Clip.none,
-                children: [
-                  Avatar(
-                      onlineStatus: onlineStatus,
-                      faceUrl: faceUrl,
-                      showName: nickName,
-                      type: convType),
-                  if (unreadCount != 0)
-                    Positioned(
-                      top: isDisturb ? -2.5 : -4.5,
-                      right: isDisturb ? -2.5 : -4.5,
-                      child: UnconstrainedBox(
-                        child: UnreadMessage(
-                            width: isDisturb ? 10 : 18,
-                            height: isDisturb ? 10 : 18,
-                            unreadCount: isDisturb ? 0 : unreadCount),
-                      ),
-                    )
-                ],
-              ),
+          SizedBox(
+            width: isDesktopScreen ? 40 : 90.sp,
+            height: isDesktopScreen ? 40 : 90.sp,
+            child: Stack(
+              fit: StackFit.expand,
+              clipBehavior: Clip.none,
+              children: [
+                Avatar(
+                    onlineStatus: onlineStatus,
+                    faceUrl: faceUrl,
+                    showName: nickName,
+                    type: convType),
+                if (unreadCount != 0)
+                  Positioned(
+                    top: isDisturb ? -2.5 : -4.5,
+                    right: isDisturb ? -2.5 : -4.5,
+                    child: UnconstrainedBox(
+                      child: UnreadMessage(
+                          width: isDisturb ? 10 : 18,
+                          height: isDisturb ? 10 : 18,
+                          unreadCount: isDisturb ? 0 : unreadCount),
+                    ),
+                  )
+              ],
             ),
           ),
           Expanded(
-              child: Container(
-            height: 60,
-            margin: EdgeInsets.only(left: isDesktopScreen ? 10 : 12),
-            padding: const EdgeInsets.only(top: 0, bottom: 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                        child: Text(
-                      nickName,
-                      softWrap: true,
-                      textAlign: TextAlign.left,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyle(
-                        height: 1,
-                        color: theme.conversationItemTitleTextColor,
-                        fontSize: isDesktopScreen ? 14 : 18,
-                        fontWeight: FontWeight.w400,
+            child: Container(
+              height: 100.h,
+              margin: EdgeInsets.only(left: isDesktopScreen ? 10 : 12),
+              padding: const EdgeInsets.only(top: 0, bottom: 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                          child: Text(
+                            nickName,
+                            softWrap: true,
+                            textAlign: TextAlign.left,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              height: 1,
+                              color: theme.conversationItemTitleTextColor,
+                              fontSize: isDesktopScreen ? 14 : 18,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )
                       ),
-                    )),
-                    _getTimeStringForChatWidget(context, theme),
-                  ],
-                ),
-                if (isHaveSecondLine())
-                  const SizedBox(
-                    height: 6,
+                      _getTimeStringForChatWidget(context, theme),
+                    ],
                   ),
-                Row(
-                  children: [
-                    Expanded(child: _getShowMsgWidget(context)),
-                    if (isDisturb)
-                      SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: Icon(
-                          Icons.notifications_off,
-                          color: theme.conversationItemNoNotificationIconColor,
-                          size: isDesktopScreen ? 14 : 16.0,
-                        ),
-                      )
-                  ],
-                ),
-              ],
-            ),
-          ))
+                  if (isHaveSecondLine())
+                    const SizedBox(
+                      height: 6,
+                    ),
+                  Row(
+                    children: [
+                      Expanded(child: _getShowMsgWidget(context)),
+                      if (isDisturb)
+                        SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: Icon(
+                            Icons.notifications_off,
+                            color: theme.conversationItemNoNotificationIconColor,
+                            size: isDesktopScreen ? 14 : 16.0,
+                          ),
+                        )
+                    ],
+                  ),
+                ],
+              ),
+            )
+          )
         ],
       ),
     );
