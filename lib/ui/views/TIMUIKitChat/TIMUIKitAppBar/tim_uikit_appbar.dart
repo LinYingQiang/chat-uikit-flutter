@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/separate_models/tui_chat_separate_view_model.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_chat_global_model.dart';
@@ -10,11 +11,10 @@ import 'package:tencent_cloud_chat_uikit/data_services/friendShip/friendship_ser
 import 'package:tencent_cloud_chat_uikit/data_services/group/group_services.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
-import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKitAppBar/tim_uikit_appbar_title.dart';
 import 'package:tuple/tuple.dart';
-import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 
+// 通用AppBar
 class TIMUIKitAppBar extends StatefulWidget implements PreferredSizeWidget {
   /// Appbar config
   final AppBar? config;
@@ -166,10 +166,9 @@ class _TIMUIKitAppBarState extends TIMUIKitState<TIMUIKitAppBar> {
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
     final TUITheme theme = value.theme;
-
+    ThemeData themeData = Theme.of(context);
     final setAppbar = widget.config;
-    final TUIChatSeparateViewModel chatVM =
-        Provider.of<TUIChatSeparateViewModel>(context);
+    final TUIChatSeparateViewModel chatVM = Provider.of<TUIChatSeparateViewModel>(context);
     return AppBar(
       backgroundColor: setAppbar?.backgroundColor ??
           theme.chatHeaderBgColor ??
@@ -214,10 +213,13 @@ class _TIMUIKitAppBarState extends TIMUIKitState<TIMUIKitAppBar> {
                     onPressed: () {
                       chatVM.updateMultiSelectStatus(false);
                     },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.transparent)
+                    ),
                     child: Text(
                       TIM_t('取消'),
                       style: TextStyle(
-                        color: theme.appbarTextColor ?? hexToColor("010000"),
+                        color: themeData.colorScheme.onBackground,
                         fontSize: 16,
                       ),
                     ),

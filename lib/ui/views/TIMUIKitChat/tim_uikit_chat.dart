@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/life_cycle/chat_life_cycle.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/listener_model/tui_group_listener_model.dart';
@@ -24,10 +25,10 @@ import 'package:tencent_cloud_chat_uikit/ui/utils/platform.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/TIMUIKitTextField/at_member_panel.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/tim_uikit_multi_select_panel.dart';
 import 'package:tencent_cloud_chat_uikit/ui/views/TIMUIKitChat/tim_uikit_send_file.dart';
+
 import 'TIMUIKItMessageList/TIMUIKitTongue/tim_uikit_chat_history_message_list_tongue.dart';
 import 'TIMUIKItMessageList/tim_uikit_chat_history_message_list_config.dart';
 import 'TIMUIKItMessageList/tim_uikit_history_message_list_container.dart';
-import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 
 class TIMUIKitChat extends StatefulWidget {
   int startTime = 0;
@@ -455,15 +456,13 @@ class _TUIChatState extends TIMUIKitState<TIMUIKitChat> {
             },
             child: Scaffold(
                 resizeToAvoidBottomInset: false,
-                appBar: (widget.customAppBar == null)
-                    ? TIMUIKitAppBar(
-                        showTotalUnReadCount: widget.showTotalUnReadCount,
-                        config: widget.appBarConfig,
-                        conversationShowName: _getTitle(),
-                        conversationID: _getConvID(),
-                        showC2cMessageEditStatus: widget.config?.showC2cMessageEditStatus ?? true,
-                      )
-                    : null,
+                appBar: TIMUIKitAppBar(
+                  showTotalUnReadCount: widget.showTotalUnReadCount,
+                  config: widget.appBarConfig,
+                  conversationShowName: _getTitle(),
+                  conversationID: _getConvID(),
+                  showC2cMessageEditStatus: widget.config?.showC2cMessageEditStatus ?? true,
+                ),
                 body: DropTarget(
                   onDragDone: (detail) {
                     setState(() {

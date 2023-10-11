@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_state.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/separate_models/tui_chat_separate_view_model.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_chat_global_model.dart';
 import 'package:tencent_cloud_chat_uikit/business_logic/view_models/tui_self_info_view_model.dart';
 import 'package:tencent_cloud_chat_uikit/data_services/services_locatar.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
-
 import 'package:tencent_cloud_chat_uikit/ui/utils/message.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 import 'package:tencent_cloud_chat_uikit/ui/widgets/recent_conversation_list.dart';
-
-import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
 
 GlobalKey<_ForwardMessageScreenState> forwardMessageScreenKey = GlobalKey();
 
@@ -84,15 +82,15 @@ class _ForwardMessageScreenState extends TIMUIKitState<ForwardMessageScreen> {
 
   @override
   void dispose() {
-    super.dispose();
     widget.model.updateMultiSelectStatus(false);
+    super.dispose();
   }
 
   @override
   Widget tuiBuild(BuildContext context, TUIKitBuildValue value) {
-    final isDesktopScreen =
-        TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
+    final isDesktopScreen = TUIKitScreenUtils.getFormFactor(context) == DeviceType.Desktop;
     final TUITheme theme = value.theme;
+    ThemeData themeData = Theme.of(context);
     if (isDesktopScreen) {
       isMultiSelect = true;
       return RecentForwardList(
@@ -117,9 +115,12 @@ class _ForwardMessageScreenState extends TIMUIKitState<ForwardMessageScreen> {
           ),
         ),
         shadowColor: theme.weakBackgroundColor,
-        backgroundColor: theme.appbarBgColor ?? theme.primaryColor,
+        backgroundColor: themeData.colorScheme.background,
         leadingWidth: 80,
         leading: TextButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent)
+          ),
           onPressed: () {
             if (isMultiSelect) {
               setState(() {
@@ -138,13 +139,16 @@ class _ForwardMessageScreenState extends TIMUIKitState<ForwardMessageScreen> {
           child: Text(
             TIM_t("取消"),
             style: TextStyle(
-              color: theme.appbarTextColor,
+              color: themeData.colorScheme.onBackground,
               fontSize: 14,
             ),
           ),
         ),
         actions: [
           TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent)
+            ),
             onPressed: () {
               if (!isMultiSelect) {
                 setState(() {
@@ -157,7 +161,7 @@ class _ForwardMessageScreenState extends TIMUIKitState<ForwardMessageScreen> {
             child: Text(
               !isMultiSelect ? TIM_t("多选") : TIM_t("完成"),
               style: TextStyle(
-                color: theme.appbarTextColor,
+                color: themeData.colorScheme.onBackground,
                 fontSize: 14,
               ),
             ),
