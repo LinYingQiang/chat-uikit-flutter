@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_base.dart';
+import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_statelesswidget.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
 import 'package:tencent_cloud_chat_uikit/ui/utils/screen_utils.dart';
 
@@ -54,9 +54,7 @@ class TIMUIKitOperationItem extends TIMUIKitStatelessWidget {
     ThemeData themeData = Theme.of(context);
     return Container(
       padding: isDesktopScreen
-          ? EdgeInsets.symmetric(
-              horizontal: isUseCheckedBoxOnWide ? 6 : 16,
-              vertical: smallCardMode ? 0 : 4)
+          ? EdgeInsets.symmetric(horizontal: isUseCheckedBoxOnWide ? 6 : 16, vertical: smallCardMode ? 0 : 4)
           : const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       margin: isDesktopScreen ? null : const EdgeInsets.only(bottom: 1),
       color: themeData.colorScheme.surface,
@@ -114,8 +112,7 @@ class TIMUIKitOperationItem extends TIMUIKitStatelessWidget {
                         if (operationDescription != null)
                           Text(
                             operationDescription!,
-                            style: TextStyle(
-                                color: theme.weakTextColor, fontSize: 12),
+                            style: TextStyle(color: theme.weakTextColor, fontSize: 12),
                           )
                       ],
                     ),
@@ -123,24 +120,22 @@ class TIMUIKitOperationItem extends TIMUIKitStatelessWidget {
                 if (!isDesktopScreen)
                   Expanded(
                       child: SizedBox(
-                    width: 130,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          operationName,
-                          style: TextStyle(
-                              color: themeData.colorScheme.onBackground),
+                        width: 130,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              operationName,
+                              style: TextStyle(color: themeData.colorScheme.onBackground),
+                            ),
+                            if (operationDescription != null)
+                              Text(
+                                operationDescription!,
+                                style: TextStyle(color: theme.weakTextColor, fontSize: 12),
+                              )
+                          ],
                         ),
-                        if (operationDescription != null)
-                          Text(
-                            operationDescription!,
-                            style: TextStyle(
-                                color: theme.weakTextColor, fontSize: 12),
-                          )
-                      ],
-                    ),
-                  )
+                      )
                   ),
                 if (type == "switch")
                   Transform.scale(
@@ -177,10 +172,8 @@ class TIMUIKitOperationItem extends TIMUIKitStatelessWidget {
                 if (type != "switch")
                   Expanded(
                       child: Row(
-                    mainAxisAlignment: isDesktopScreen
-                        ? MainAxisAlignment.start
-                        : MainAxisAlignment.end,
-                    children: [Expanded(child: operationRightWidget ?? const Text(""))],
+                        mainAxisAlignment: isDesktopScreen ? MainAxisAlignment.start : MainAxisAlignment.end,
+                        children: [Expanded(child: operationRightWidget ?? const Text(""))],
                   )),
                 (type != "switch" && !isDesktopScreen && showAllowEditStatus)
                     ? const Icon(Icons.keyboard_arrow_right)

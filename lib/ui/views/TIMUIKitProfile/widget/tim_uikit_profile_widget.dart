@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:tencent_cloud_chat_uikit/base_widgets/tim_ui_kit_class.dart';
 import 'package:tencent_cloud_chat_uikit/tencent_cloud_chat_uikit.dart';
-
 import 'package:tencent_cloud_chat_uikit/ui/widgets/avatar.dart';
 
 class TIMUIKitProfileWidget extends TIMUIKitClass {
@@ -19,11 +18,7 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
   }
 
   /// Remarks
-  static Widget remarkBar(
-      BuildContext context,
-      String remark,
-      Function({Offset? offset, String? initText})? handleTap,
-      bool smallCardMode) {
+  static Widget remarkBar(BuildContext context, String remark, Function({Offset? offset, String? initText})? handleTap, bool smallCardMode) {
     final GlobalKey key = GlobalKey();
     return InkWell(
       onTapDown: (details) {
@@ -34,7 +29,8 @@ class TIMUIKitProfileWidget extends TIMUIKitClass {
                       MediaQuery.of(context).size.width - 400),
                   min(details.globalPosition.dy,
                       MediaQuery.of(context).size.height - 100)),
-              initText: remark);
+              initText: remark
+          );
         }
       },
       child: TIMUIKitOperationItem(
